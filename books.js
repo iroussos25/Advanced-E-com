@@ -1,10 +1,17 @@
-function renderBooks() {
-const booksWrapper = document.querySelector('.book');
+function renderBooks(filter) {
+const booksWrapper = document.querySelector('.books');
 
 const books = getBooks();
 
+console.log(filter)}
+if (filter === 'LOW_TO_HIGH') {
+console.log(filter)
+const filteredBooks = books.sort((a, b) => a.originalPrice-b.originalPrice);
+console.log(filteredBooks)
+}
 
-const booksHtml = books.map(book =>{
+const booksHtml = books
+.map((book) =>{
 return `<div class="book">
 <figure class="book__img--wrapper">
   <img class="book__img" src="${book.url}" alt="">
@@ -20,15 +27,22 @@ ${book.title}
   <i class="fas fa-star-half-alt"></i>
 </div>
 <div class="book__price">
-  <span class="book__price--normal">$${books[0].originalPrice}</span> $${books[0].salePrice}
+  <span class=>$${book.originalPrice.toFixed(2)}</span>
 </div>
 </div>`
 } ) 
+.join("")
   booksWrapper.innerHTML = booksHtml;
   console.log(booksHtml)
 
 
+
+
+function filterBooks(event)  {
+renderBooks(event.target.value)
 }
+
+
 
 setTimeout(() => {
   renderBooks();
