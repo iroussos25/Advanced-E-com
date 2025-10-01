@@ -1,20 +1,31 @@
-function renderBooks(filter) {
+let books;
+
+async function renderBooks(filter) {
 const booksWrapper = document.querySelector('.books');
+booksWrapper.classList += ' books__loading'
 
-const books = getBooks();
-
+if (!books) {
+  books = await getBooks();
+  
+}
+booksWrapper.classList.remove('books__loading')
 
 if (filter === 'LOW_TO_HIGH') {
-books.sort((a, b) => a.originalPrice-b.originalPrice);
-
+books.sort(
+  (a, b) =>
+    (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice));
 }
-else if (filter === 'HIGH_T_LOW')  {
-  books.sort((a, b) => b.originalPrice-a.originalPrice);
+else if (filter === 'HIGH_TO_LOW')  {
+  books.sort(
+    (a, b) => 
+      (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice));
 
 }
 
 else if (filter === 'RATING') {
-  books.sort((a, b) => b.rating-a.rating);
+  books.sort(
+    (a, b) => 
+      b.rating-a.rating);
 
 }
 
@@ -43,11 +54,13 @@ ${ratingsHTML(book.rating)}
 
 function priceHTML(originalPrice, salePrice) {
 if (!salePrice) {
-  return `$(originalPrice.toFixed(2))`
+  return `$${originalPrice.toFixed(2)}`
 }
-return 'there is a sale'
-  console.log(originalPrice, salePrice)
- // <span class="book__price--normal">$59.95</span> $14.95
+ 
+  return `<span class="book__price--normal">$${originalPrice.toFixed(2)}</span>$${salePrice.toFixed(2)}`
+
+
+
 }
 
 function ratingsHTML(rating) {
@@ -80,8 +93,10 @@ setTimeout(() => {
 
 // FAKE DATA
 function getBooks() {
-  return [
-    {
+ return new Promise((resolve, reject) => {
+setTimeout(() => {
+resolve([
+   {
       id: 1,
       title: "Crack the Coding Interview",
                 url: "assets/crack the coding interview.png",
@@ -169,5 +184,8 @@ function getBooks() {
       salePrice: null,
       rating: 4.5,
     },
-  ];
+])
+}, 1000)
+  })
+ 
 }
